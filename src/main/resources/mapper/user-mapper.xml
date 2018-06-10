@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chinasoft.mapper.UserMapper">
+    <resultMap id="user" type="com.chinasoft.pojo.User">
+        <result column="user_id" property="userId"/>
+        <result column="job_id" property="jobId"/>
+        <result column="user_name" property="userName"/>
+        <result column="password" property="password"/>
+        <result column="email" property="email"/>
+        <result column="image_url" property="imageUrl"/>
+        <result column="gender" property="gender"/>
+        <result column="phone_num" property="phoneNum"/>
+        <result column="birthday" property="birthday"/>
+        <result column="register_time" property="registerTime"/>
+        <result column="login_name" property="loginName"/>
+        <result column="is_lock" property="isLock"/>
+    </resultMap>
+    <select id="loginJudge" resultType="java.lang.String">
+        select password from sys_user where login_name=#{loginName}
+    </select>
+    <insert id="insert">
+        insert into sys_user(user_id,login_name,password,email) values(NULL,#{loginName},#{password},#{email})
+    </insert>
+    <select id="userIsExist" resultType="java.lang.String">
+        select login_name from sys_user where login_name=#{loginName}
+    </select>
+</mapper>
