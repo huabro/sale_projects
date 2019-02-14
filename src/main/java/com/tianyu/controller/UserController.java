@@ -51,31 +51,18 @@ public class UserController {
     }
 
     @RequestMapping(value = "register", method = RequestMethod.POST)
-    public ModelAndView addUser(ModelAndView mv, String loginName, String password, String email) {
-        Boolean isExist = userService.register(loginName, password, email);
+    public ModelAndView addUser(ModelAndView mv, String loginName, String password) {
+        Boolean isExist= userService.userExist(loginName);
         if (isExist) {
             mv.setViewName("register.jsp");
             mv.addObject("msg", "用户已存在");
             return mv;
         } else {
+            userService.insert(loginName, password);
             mv.addObject("msg", "");
             mv.setViewName("login.jsp");
             return mv;
         }
     }
 
-    @RequestMapping(value = "verifyUser", method = RequestMethod.POST)
-    @ResponseBody
-    public Object verifyUser(String loginName, HttpServletResponse response) throws IOException {
-        Boolean isExist = userService.register(loginName, null, null);
-        JsonResult jsonResult=new JsonResult();
-        if (isExist) {
-            jsonResult.setMsg("用户已存在");
-           return jsonResult;
-        } else {
-            jsonResult.setMsg("");
-            return  jsonResult;
-        }
-
-    }
 }

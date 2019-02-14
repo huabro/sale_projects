@@ -1,6 +1,7 @@
 package com.tianyu.service;
 
 import com.tianyu.dao.UserDao;
+import com.tianyu.pojo.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +21,24 @@ public class UserService {
         return  userDao.loginJudge(loginName,pwd);
     }
     //注册判断
-    public Boolean register(String loginName,String password,String email){
-        return  userDao.register(loginName,password,email);
+    public boolean userExist(String loginName){
+        return  userDao.userExist(loginName);
+    }
+    //新增用户
+    @Transactional
+    public Boolean insert(String loginName,String password){
+        User user=new User();
+        user.setUserName(loginName.trim());
+        user.setPassword(password.trim());
+        return  userDao.insert(user);
+    }
+    //用户信息维护
+    @Transactional
+    public Boolean update(Integer userId,String loginName,String password){
+        User user=new User();
+        user.setUserId(userId);
+        user.setUserName(loginName.trim());
+        user.setPassword(password.trim());
+        return  userDao.update(user);
     }
 }
