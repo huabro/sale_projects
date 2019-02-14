@@ -1,7 +1,7 @@
-package com.chinasoft.controller;
+package com.tianyu.controller;
 
-import com.chinasoft.common.JsonResult;
-import com.chinasoft.service.UserService;
+import com.tianyu.common.JsonResult;
+import com.tianyu.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

@@ -1,4 +1,4 @@
-package com.chinasoft.pojo;
+package com.tianyu.pojo;
 
 /**
  * Created by Administrator on 2017/1/20 0020.

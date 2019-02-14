@@ -1,6 +1,6 @@
-package com.chinasoft.mapper;
+package com.tianyu.mapper;
 
-import com.chinasoft.pojo.User;
+import com.tianyu.pojo.User;
 import org.apache.ibatis.annotations.Param;
 
 /**

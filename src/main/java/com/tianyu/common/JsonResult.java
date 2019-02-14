@@ -1,4 +1,4 @@
-package com.chinasoft.common;
+package com.tianyu.common;
 
 /**
  * Created by Administrator on 2017/1/22 0022.

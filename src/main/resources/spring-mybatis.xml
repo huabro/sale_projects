@@ -6,9 +6,9 @@
 
     <bean name="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <property name="url" value="jdbc:mysql://localhost:3306/tuyou?useUnicode=true&amp;characterEncoding=utf-8" />
-        <property name="username" value="root" />
-        <property name="password" value="123" />
+        <property name="url" value="jdbc:mysql://localhost:3306/test?useUnicode=true&amp;characterEncoding=utf-8" />
+        <property name="username" value="root2" />
+        <property name="password" value="111" />
     </bean>
 
     <!-- 配置SqlSessionBeanFactory-->
@@ -20,6 +20,6 @@
     </bean>
     <!-- 扫描mapper接口-->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com.chinasoft.mapper"></property>
+        <property name="basePackage" value="com.tianyu.mapper"></property>
     </bean>
 </beans>

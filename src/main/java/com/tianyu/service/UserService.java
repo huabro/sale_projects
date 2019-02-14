@@ -1,7 +1,8 @@
-package com.chinasoft.service;
+package com.tianyu.service;
 
-import com.chinasoft.dao.UserDao;
+import com.tianyu.dao.UserDao;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -14,6 +15,7 @@ public class UserService {
     @Resource
     UserDao userDao;
     //登录判断
+    @Transactional
     public int loginJudge(String loginName, String pwd) {
         return  userDao.loginJudge(loginName,pwd);
     }

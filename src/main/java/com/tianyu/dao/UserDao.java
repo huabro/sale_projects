@@ -1,7 +1,7 @@
-package com.chinasoft.dao;
+package com.tianyu.dao;
 
-import com.chinasoft.mapper.UserMapper;
-import com.chinasoft.pojo.User;
+import com.tianyu.mapper.UserMapper;
+import com.tianyu.pojo.User;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
