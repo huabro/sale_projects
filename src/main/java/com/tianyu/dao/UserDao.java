@@ -59,10 +59,7 @@ public class UserDao {
     //注册
     public void insert(User user) throws  Exception{
         Session session = sessionFactory.openSession();
-        Transaction transaction = session.beginTransaction();
-
         session.save(user);
-        transaction.commit();
         session.close();
     }
 

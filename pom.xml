@@ -29,6 +29,19 @@
       <artifactId>spring-webmvc</artifactId>
       <version>4.0.2.RELEASE</version>
     </dependency>
+    <!--面向切面，事务回滚扫描-->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-aop</artifactId>
+      <version>4.0.2.RELEASE</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-aspects</artifactId>
+      <version>4.0.2.RELEASE</version>
+    </dependency>
+
     <dependency>
       <groupId>commons-fileupload</groupId>
       <artifactId>commons-fileupload</artifactId>

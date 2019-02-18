@@ -26,7 +26,7 @@ public class TestTransaction {
     UserService userService;
 
     @Test
-    public void testInsert()throws Exception {
+    public void testInsert() {
         String loginName="bbc";
         String passward="768";
 
