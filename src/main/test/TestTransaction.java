@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.io.ByteArrayOutputStream;
@@ -23,15 +24,14 @@ import java.util.Map;
 public class TestTransaction {
     @Resource
     UserService userService;
+
     @Test
-    public void testInsert() {
-        String loginName="qqwe";
-        String passward="sdsdfsd";
+    public void testInsert()throws Exception {
+        String loginName="bbc";
+        String passward="768";
+
         userService.insert(loginName,passward);
-        userService.insert("s","ss");
-        userService.insert("aa","dd");
-        userService.insert("cc","vv");
-//        userService.update(2,null,passward);
+
     }
 
     @Test

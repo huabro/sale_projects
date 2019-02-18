@@ -1,5 +1,8 @@
 package com.tianyu.pojo;
 
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.*;
 
 /**
@@ -7,6 +10,8 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "book_user")
+@DynamicInsert
+@DynamicUpdate
 public class User {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -16,7 +21,7 @@ public class User {
     private String userName;
     @Column(name = "password")
     private String password;
-    @Column(name = "lockStatus",nullable=false,columnDefinition="varchar(10) default '0'")
+    @Column(name = "lockStatus",nullable=true,columnDefinition="varchar(10) default '0'")
     private String lockStatus;
 
     public Integer getUserId() {

@@ -51,7 +51,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "register", method = RequestMethod.POST)
-    public ModelAndView addUser(ModelAndView mv, String loginName, String password) {
+    public ModelAndView addUser(ModelAndView mv, String loginName, String password)throws Exception {
         Boolean isExist= userService.userExist(loginName);
         if (isExist) {
             mv.setViewName("register.jsp");

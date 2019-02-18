@@ -12,6 +12,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Resource;
+import javax.persistence.TemporalType;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Administrator on 2017/1/20 0020.
@@ -28,7 +31,8 @@ public class UserDao {
     public int loginJudge(String loginName, String password) {
         int flag = 0;
         Session session = sessionFactory.openSession();
-        Query query = session.createQuery(" select password from book_user where userName=?");
+        StringBuffer sql=new StringBuffer(" select password from User where userName=?");
+        Query query = session.createQuery(sql.toString());
         query.setParameter(0, loginName);
         String pwd = (String) query.uniqueResult();
         if (StringUtils.equals(pwd, password))
@@ -44,33 +48,64 @@ public class UserDao {
     public boolean userExist(String loginName) {
         int flag = 0;
         Session session = sessionFactory.openSession();
-        Query query = session.createQuery(" select userName from book_user where userName=?");
+        StringBuffer sql=new StringBuffer(" select userName from User where userName=?");
+        Query query = session.createQuery(sql.toString());
         query.setParameter(0, loginName);
-         loginName = (String) query.uniqueResult();
+        loginName = (String) query.uniqueResult();
         session.close();
-        return StringUtils.isEmpty(loginName)?false:true;
+        return StringUtils.isEmpty(loginName) ? false : true;
     }
 
     //注册
-    public boolean insert(User user) {
+    public void insert(User user) throws  Exception{
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        try {
-            session.save(user);
-            transaction.commit();
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return false;
-        }
+
+        session.save(user);
+        transaction.commit();
         session.close();
-        return true;
     }
+
     //更新用户信息
     public boolean update(User user) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
+        StringBuffer sql = new StringBuffer("UPDATE User set ");
+        List<String> paramterList = new ArrayList<String>();
+        boolean secondUpdateflag = false;
+        if (!StringUtils.isEmpty(user.getUserName())) {
+            sql.append(" userName=? ");
+            paramterList.add(user.getUserName());
+            secondUpdateflag = true;
+        }
+        if (!StringUtils.isEmpty(user.getPassword())) {
+            if (secondUpdateflag) {
+                sql.append(",");
+            }
+            sql.append(" password=?");
+            paramterList.add(user.getPassword());
+        }
+        if (!StringUtils.isEmpty(user.getLockStatus())) {
+            if (secondUpdateflag) {
+                sql.append(",");
+            }
+            sql.append(" lockStatus=?");
+            paramterList.add(user.getLockStatus());
+        }
+        sql.append(" where userId=?");
+        paramterList.add(String.valueOf(user.getUserId()));
         try {
-            session.update(user);
+            Query query = session.createQuery(sql.toString());
+            int i = 0;
+            for (String param : paramterList) {
+                if(i==paramterList.size()-1){
+                    query.setParameter(i,StringUtils.stringToInteger(param));
+                }else {
+                    query.setParameter(i, param);
+                }
+                i++;
+            }
+            query.executeUpdate();
             transaction.commit();
         } catch (Exception e) {
             log.error(e.getMessage());
