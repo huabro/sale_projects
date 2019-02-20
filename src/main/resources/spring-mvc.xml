@@ -12,7 +12,7 @@
     <mvc:annotation-driven></mvc:annotation-driven>
     <!--指定静态资源路径 -->
     <mvc:resources mapping="/static/**" location="/static/"></mvc:resources>
-    <aop:aspectj-autoproxy proxy-target-class="true" />
+
 
     <!--配置上传解析器,必须给id名，且名称必须为这个，这是spring -->
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"></bean>
@@ -20,5 +20,32 @@
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" >
         <property name="prefix" value="/WEB-INF/jsp/"></property>
     </bean>
+
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+    <!-- 开启事务控制的注解支持 -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <!-- 定义事务策略 -->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <!-- 所有以query开头的方法都是只读的-->
+            <tx:method name="query*" read-only="true" />
+            <tx:method name="get*" read-only="true" />
+            <tx:method name="find*" read-only="true" />
+            <tx:method name="select*" read-only="true" />
+            <!-- 其他方法使用默认事务策略 -->
+            <tx:method name="*" rollback-for="Throwable"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <aop:config>
+        <aop:pointcut id="myPointcut" expression="execution(* com.tianyu.service.*.*(..))" />
+        <!-- 将定义好的事务处理策略应用到上述的切入点 -->
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="myPointcut" />
+    </aop:config>
+    <aop:aspectj-autoproxy proxy-target-class="true" />
 
 </beans>

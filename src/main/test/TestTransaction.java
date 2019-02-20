@@ -7,6 +7,7 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.annotation.Resource;
 import java.io.ByteArrayOutputStream;
@@ -31,7 +32,6 @@ public class TestTransaction {
         String passward="768";
 
         userService.insert(loginName,passward);
-
     }
 
     @Test

@@ -30,25 +30,29 @@ public class UserService {
         return  userDao.userExist(loginName);
     }
     //新增用户
-    @Transactional(rollbackFor=Exception.class)
-    public Boolean insert(String loginName,String password){
-
-            User user = new User();
-            user.setUserName(loginName);
-            user.setPassword(password);
-
-            User user2 = new User();
-            user2.setUserName(null);
-            user2.setPassword(password);
-            try {
+    public Boolean insert(User user,User user2)throws Exception{
                 userDao.insert(user);
                 userDao.insert(user2);
-            } catch (Exception e) {
-                log.error(e.getMessage());
-                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            }
+//                log.error(e.getMessage());
+//                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+
 
         return  true;
+    }
+    @Transactional(rollbackFor=Exception.class)
+    public void insert(String loginName,String password){
+        User user = new User();
+        user.setUserName(loginName);
+        user.setPassword(password);
+
+        User user2 = new User();
+        user2.setUserName(null);
+        user2.setPassword(password);
+        try {
+            insert(user, user2);
+        }catch (Exception e){
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+        }
     }
     //用户信息维护
     @Transactional
