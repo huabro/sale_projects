@@ -2,17 +2,12 @@ package com.tianyu.dao;
 
 import com.alibaba.druid.util.StringUtils;
 import com.tianyu.pojo.User;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
+import org.hibernate.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.hibernate4.HibernateCallback;
 import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,59 +15,54 @@ import java.util.List;
  * Created by Administrator on 2017/1/20 0020.
  */
 @Repository
-public class UserDao extends HibernateDaoSupport{
+public class UserDao extends HibernateDaoSupport {
 
     @Autowired
-    public UserDao(SessionFactory sf){
+    public UserDao(SessionFactory sf) {
         super.setSessionFactory(sf);
     }
-
-    @Resource
-    SessionFactory sessionFactory;
-
-    private static Logger log = LogManager.getLogger(UserDao.class);
-
 
     //登录判断
     public int loginJudge(String loginName, String password) {
         int flag = 0;
-        Session session = sessionFactory.openSession();
-        StringBuffer sql=new StringBuffer(" select password from User where userName=?");
-        Query query = session.createQuery(sql.toString());
-        query.setParameter(0, loginName);
-        String pwd = (String) query.uniqueResult();
-        if (StringUtils.equals(pwd, password))
-            flag = 1;
-        else {
-            flag = 2;
+        StringBuffer sql = new StringBuffer("from User where userName=?");
+        String[] params = new String[1];
+        params[0] = loginName;
+        List<User> userList = (List<User>) this.getHibernateTemplate().find(sql.toString(), params);
+        if (userList != null && userList.size() > 0) {
+            if (StringUtils.equals(userList.get(0).getPassword(), password))
+                flag = 1;
+            else {
+                flag = 2;
+            }
         }
-        session.close();
         return flag;
     }
 
-    //登录判断
+    //注册判断用户名是否重复
     public boolean userExist(String loginName) {
-        int flag = 0;
-        Session session = sessionFactory.openSession();
-        StringBuffer sql=new StringBuffer(" select userName from User where userName=?");
-        Query query = session.createQuery(sql.toString());
-        query.setParameter(0, loginName);
-        loginName = (String) query.uniqueResult();
-        session.close();
-        return StringUtils.isEmpty(loginName) ? false : true;
+        boolean flag = false;
+        StringBuffer sql = new StringBuffer(" from User where userName=?");
+        String[] params = new String[1];
+        params[0] = loginName;
+
+        List<User> userList = (List<User>) this.getHibernateTemplate().find(sql.toString(), params);
+        if (!(userList != null && userList.size() > 0)) {
+            flag = true;
+        }
+        return flag;
     }
 
     //注册
-    public void insert(User user) throws  Exception{
+    public void insert(User user) throws Exception {
         this.getHibernateTemplate().save(user);
     }
 
     //更新用户信息
-    public boolean update(User user) {
-        Session session = sessionFactory.openSession();
-        Transaction transaction = session.beginTransaction();
+    public boolean update(User user) throws Exception {
+
         StringBuffer sql = new StringBuffer("UPDATE User set ");
-        List<String> paramterList = new ArrayList<String>();
+        final List<String> paramterList = new ArrayList<String>();
         boolean secondUpdateflag = false;
         if (!StringUtils.isEmpty(user.getUserName())) {
             sql.append(" userName=? ");
@@ -95,25 +85,29 @@ public class UserDao extends HibernateDaoSupport{
         }
         sql.append(" where userId=?");
         paramterList.add(String.valueOf(user.getUserId()));
+        final String actionSql = sql.toString();
         try {
-            Query query = session.createQuery(sql.toString());
-            int i = 0;
-            for (String param : paramterList) {
-                if(i==paramterList.size()-1){
-                    query.setParameter(i,StringUtils.stringToInteger(param));
-                }else {
-                    query.setParameter(i, param);
+            Object execute = this.getHibernateTemplate().execute(new HibernateCallback() {
+                public Object doInHibernate(Session session) throws HibernateException {
+                    Query query = session.createQuery(actionSql);
+                    int i = 0;
+                    for (String param : paramterList) {
+                        if (i == paramterList.size() - 1) {
+                            query.setParameter(i, StringUtils.stringToInteger(param));
+                        } else {
+                            query.setParameter(i, param);
+                        }
+                        i++;
+                    }
+                    return query.executeUpdate();
                 }
-                i++;
-            }
-            query.executeUpdate();
-            transaction.commit();
+            });
+            int result = Integer.parseInt(String.valueOf(execute));
+            return result > 0 ? true : false;
         } catch (Exception e) {
-            log.error(e.getMessage());
-            return false;
+            e.printStackTrace();
         }
-        session.close();
-        return true;
+        return false;
     }
 
     public void update(User user,String test){
