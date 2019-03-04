@@ -54,4 +54,14 @@ public class User {
     public void setLockStatus(String lockStatus) {
         this.lockStatus = lockStatus;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId=" + userId +
+                ", userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
+                ", lockStatus='" + lockStatus + '\'' +
+                '}';
+    }
 }

@@ -110,7 +110,20 @@ public class UserDao extends HibernateDaoSupport {
         return false;
     }
 
-    public void update(User user,String test){
+    /**
+     * 更新数据库
+     *
+     * @param user
+     * @param test
+     */
+    public void update(User user, String test) {
         this.getHibernateTemplate().update(user);
+    }
+
+    public List<User> getUserById(String userId) {
+        StringBuffer sql = new StringBuffer("from User where userId=?");
+        Object[] params = {userId};
+        List<User> objects = (List<User>) this.getHibernateTemplate().find(sql.toString(), params);
+        return objects;
     }
 }
