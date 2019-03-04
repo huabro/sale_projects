@@ -10,8 +10,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "book_user")
-@DynamicInsert
-@DynamicUpdate
+@DynamicUpdate(true)
 public class User {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
