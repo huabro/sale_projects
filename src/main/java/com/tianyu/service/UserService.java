@@ -29,15 +29,9 @@ public class UserService {
     public boolean userExist(String loginName){
         return  userDao.userExist(loginName);
     }
-    //新增用户
-    public Boolean insert(User user,User user2)throws Exception{
-        userDao.insert(user);
-        userDao.insert(user2);
-        return  true;
-    }
 
     /**
-     *
+     *新增用户
      * @param loginName
      * @param password
      */
@@ -51,13 +45,14 @@ public class UserService {
         user2.setUserName(null);
         user2.setPassword(password);
         try {
-            insert(user, user2);
+            userDao.insert(user);
+            userDao.insert(user2);
         }catch (Exception e){
             e.printStackTrace();
         }
     }
     //用户信息维护
-    @Transactional
+    @Transactional(rollbackFor=Exception.class)
     public Boolean update(Integer userId,String loginName,String password,String lockStatus){
         if(userId==null){
             return false;
@@ -67,6 +62,12 @@ public class UserService {
         user.setUserName(loginName);
         user.setPassword(password);
         user.setLockStatus(lockStatus);
-        return  userDao.update(user);
+        try {
+            userDao.update(user);
+            int i=1/0;
+        }catch (Exception e){
+            log.error("更新人员信息失败，事务回滚",e.getMessage());
+        }
+        return true;
     }
 }

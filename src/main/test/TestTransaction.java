@@ -28,10 +28,10 @@ public class TestTransaction {
 
     @Test
     public void testInsert() {
-        String loginName="bbc";
+        String loginName="nvcbcv";
         String passward="768";
-
-        userService.insert(loginName,passward);
+        Integer userID=43;
+        userService.update(43,loginName,null,"0");
     }
 
     @Test
