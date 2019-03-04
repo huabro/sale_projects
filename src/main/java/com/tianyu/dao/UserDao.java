@@ -115,4 +115,8 @@ public class UserDao extends HibernateDaoSupport{
         session.close();
         return true;
     }
+
+    public void update(User user,String test){
+        this.getHibernateTemplate().update(user);
+    }
 }
