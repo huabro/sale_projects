@@ -2,18 +2,17 @@ package com.tianyu.dao;
 
 import com.alibaba.druid.util.StringUtils;
 import com.tianyu.pojo.User;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.annotations.common.util.impl.LoggerFactory;
-import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import javax.persistence.TemporalType;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +20,13 @@ import java.util.List;
  * Created by Administrator on 2017/1/20 0020.
  */
 @Repository
-public class UserDao {
+public class UserDao extends HibernateDaoSupport{
+
+    @Autowired
+    public UserDao(SessionFactory sf){
+        super.setSessionFactory(sf);
+    }
+
     @Resource
     SessionFactory sessionFactory;
 
@@ -59,9 +64,7 @@ public class UserDao {
 
     //注册
     public void insert(User user) throws  Exception{
-        Session session = sessionFactory.openSession();
-        session.save(user);
-        session.close();
+        this.getHibernateTemplate().save(user);
     }
 
     //更新用户信息

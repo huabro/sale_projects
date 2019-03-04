@@ -31,14 +31,16 @@ public class UserService {
     }
     //新增用户
     public Boolean insert(User user,User user2)throws Exception{
-                userDao.insert(user);
-                userDao.insert(user2);
-//                log.error(e.getMessage());
-//                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-
-
+        userDao.insert(user);
+        userDao.insert(user2);
         return  true;
     }
+
+    /**
+     *
+     * @param loginName
+     * @param password
+     */
     @Transactional(rollbackFor=Exception.class)
     public void insert(String loginName,String password){
         User user = new User();
@@ -51,7 +53,7 @@ public class UserService {
         try {
             insert(user, user2);
         }catch (Exception e){
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            e.printStackTrace();
         }
     }
     //用户信息维护
