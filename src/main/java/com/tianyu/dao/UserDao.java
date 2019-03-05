@@ -86,27 +86,23 @@ public class UserDao extends HibernateDaoSupport {
         sql.append(" where userId=?");
         paramterList.add(String.valueOf(user.getUserId()));
         final String actionSql = sql.toString();
-        try {
-            Object execute = this.getHibernateTemplate().execute(new HibernateCallback() {
-                public Object doInHibernate(Session session) throws HibernateException {
-                    Query query = session.createQuery(actionSql);
-                    int i = 0;
-                    for (String param : paramterList) {
-                        if (i == paramterList.size() - 1) {
-                            query.setParameter(i, StringUtils.stringToInteger(param));
-                        } else {
-                            query.setParameter(i, param);
-                        }
-                        i++;
+
+        Object execute = this.getHibernateTemplate().execute(new HibernateCallback() {
+            public Object doInHibernate(Session session) throws HibernateException {
+                Query query = session.createQuery(actionSql);
+                int i = 0;
+                for (String param : paramterList) {
+                    if (i == paramterList.size() - 1) {
+                        query.setParameter(i, StringUtils.stringToInteger(param));
+                    } else {
+                        query.setParameter(i, param);
                     }
-                    return query.executeUpdate();
+                    i++;
                 }
-            });
-            int result = Integer.parseInt(String.valueOf(execute));
-            return result > 0 ? true : false;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
+                return query.executeUpdate();
+            }
+        });
+        int result = Integer.parseInt(String.valueOf(execute));
+        return result > 0 ? true : false;
     }
 }
