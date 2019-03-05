@@ -28,14 +28,19 @@ public class TestTransaction {
 
     @Test
     public void testInsert() {
-        String loginName="nvcbcv";
-        String passward="768";
-        Integer userID=43;
-        userService.update(43,loginName,null,"0");
+        Integer userID = 8;
+        String loginName = "a";
+        String passward = "a";
+        try {
+            userService.update(userID, loginName, null, "0");
+//            userService.propa(userID,loginName,null,"0");
+        } catch (Exception e) {
+            System.out.println("error");
+        }
     }
 
     @Test
-    public void testExport(){
+    public void testExport() {
 //        List<Map<String, Object>> userList=new ArrayList();
 //        Map<String, Object> initMap = new HashMap<String, Object>();
 //        initMap.put("sheetName", "sheet1");

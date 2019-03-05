@@ -37,7 +37,7 @@
             <tx:method name="find*" read-only="true" />
             <tx:method name="select*" read-only="true" />
             <!-- 其他方法使用默认事务策略 -->
-            <tx:method name="*" rollback-for="Throwable"/>
+            <tx:method name="*" rollback-for="Exception"/>
         </tx:attributes>
     </tx:advice>
 
